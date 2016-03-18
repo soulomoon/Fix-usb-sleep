@@ -203,7 +203,7 @@ function main()
     #
     # Finish. Request reboot.
     #
-    _PRINT_MSG "NOTE: DONE! Please reboot to see change! if you have any questions or bugs to report, post issue on https://github.com/syscl/Fix-usb-sleep. THX :-)"
+    _PRINT_MSG "NOTE: DONE! Please reboot to see change! If you have any questions or bugs to report, post issue on https://github.com/syscl/Fix-usb-sleep. THX :-)"
 }
 
 #==================================== START =====================================

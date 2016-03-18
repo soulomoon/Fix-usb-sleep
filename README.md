@@ -14,21 +14,21 @@ git clone https://github.com/syscl/Fix-usb-sleep
 ```
 
 
-This will download fixUSB.sh to your home directory (~) and the next step is to change the permissions of the file (add +x) so that it can be run.
+This will download fixUSB.sh to your current directory (./) and the next step is to change the permissions of the file (add +x) so that it can be run.
  
 ``` sh
-chmod +x ~/Fix-usb-sleep/fixUSB.sh
+chmod +x ./Fix-usb-sleep/fixUSB.sh
 ```
 
 
 Run the script in a terminal window by:
 
 ``` sh
-cd ~/Fix-usb-sleep
+cd ./Fix-usb-sleep
 ./fixusb.sh
 ```
 
-Once you finish the procedure, reboot your OS X and see if the issue is fixed.
+Once you finish the procedures, reboot your OS X and see if the issue is fixed.
 
 Change Log
 ----------------
