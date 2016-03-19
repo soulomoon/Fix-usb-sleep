@@ -33,6 +33,11 @@ Once you finish the procedures, reboot your OS X and see if the issue is fixed.
 Change Log
 ----------------
 
+2016-3-19
+
+- Huge update, use "eject" command line to boost the mount upon sleep. Faster than ever!
+- Fixed two key command lines.
+
 2016-3-18
 
 - First version of fixUSB.sh
