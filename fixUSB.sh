@@ -196,6 +196,7 @@ function main()
     tidy_execute "sudo cp "${gFrom}/sleepwatcher" "${gInstallDameon}"" "Install sleepwatcher daemon"
     tidy_execute "sudo cp "${gConfig}" "/Library/LaunchDaemons"" "Install configuration of sleepwatcher daemon"
     tidy_execute "sudo cp "${gUSBSleepScript}" "/etc"" "Install sleepwatcher script"
+    tidy_execute "sudo chmod +x /etc/sysclusbfix.sleep" "Change the permissions of the script (add +x) so that it can be run before sleep"
 
     #
     # Clean up.

@@ -37,6 +37,7 @@ Change Log
 
 - Huge update, use "eject" command line to boost the mount upon sleep. Faster than ever!
 - Fixed two key command lines.
+- Change the permissions of the script (add +x) so that it can be run before sleep.
 
 2016-3-18
 
