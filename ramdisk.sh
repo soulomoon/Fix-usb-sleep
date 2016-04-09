@@ -135,7 +135,6 @@ function _initCache()
     #
     for disk in ${gVirtual_Disk[@]}
     do
-      echo ${disk}
       _checkRAM ${disk}
     done
 
