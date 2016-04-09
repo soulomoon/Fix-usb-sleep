@@ -30,6 +30,34 @@ cd ./Fix-usb-sleep
 
 Once you finish the procedures, reboot your OS X and see if the issue is fixed.
 
+How to use ramdisk?
+----------------
+Download the latest fixUSB.sh by entering the following command in a terminal window:
+
+``` sh
+curl -o ./ramdisk https://raw.githubusercontent.com/syscl/Fix-usb-sleep/master/ramdisk.sh
+```
+
+This will download ramdisk to your current directory (./) and the next step is to change the permissions of the file (add +x) so that it can be run.
+
+``` sh
+chmod +x ./ramdisk
+```
+
+Run the script in a terminal window by:
+
+``` sh
+./ramdisk
+```
+Reboot your OS X to see the change. If you have any problem about the script, try to run deploy in DEBUG mode by
+```sh
+./ramdisk -d
+```
+or
+```sh
+./ramdisk -debug
+```
+
 Change Log
 ----------------
 
