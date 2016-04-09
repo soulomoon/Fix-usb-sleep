@@ -49,8 +49,6 @@ gAlloc_RAM=16777216
 #
 # Path and filename setup.
 #
-gInstallDameon="/usr/local/sbin"
-gFrom="${REPO}/tools"
 gConfig="/tmp/com.syscl.ramdisk.plist"
 gRAMScript="${REPO}/ramdisk.sh"
 
