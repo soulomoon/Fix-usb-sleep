@@ -40,6 +40,7 @@ REPO=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 #
 gArgv=""
 gDebug=1
+gVirt=""
 gR_NAME=RAMDISK
 gMnt=1
 gVirtual_Disk=$(diskutil list | grep -i "disk image" | sed -e "s| (disk image):||" | awk -F'\/' '{print $3}')
@@ -164,9 +165,9 @@ function _checkRAM()
     # Check if virtual disk is mounted.
     #
     local gDev=$1
-    local gVirt=$(diskutil info $gDev | grep -i "Virtual" | tr '[:lower:]' '[:upper:]')
+    gVirt=$(diskutil info $gDev | grep -i "Virtual" | tr '[:lower:]' '[:upper:]')
 
-    if [[ `diskutil info $gDev` == *"YES"* ]];
+    if [[ "$gVirt" == *"YES"* ]];
       then
         #
         # Yes, virtual disk exist.
@@ -258,6 +259,20 @@ function _uninstall_ramdisk
       then
         tidy_execute "sudo rm /etc/syscl.ramdisk" "Remove syscl.ramdisk"
     fi
+
+    #
+    # Detach virtual disk(s).
+    #
+    for disk in ${gVirtual_Disk[@]}
+    do
+      gVirt=$(diskutil info ${disk} | grep -i "Virtual" | tr '[:lower:]' '[:upper:]')
+
+      if [[ "$gVirt" == *"YES"* ]];
+        then
+          tidy_execute "diskutil eject ${disk}" "Eject ${disk}"
+      fi
+
+    done
 
     _PRINT_MSG "NOTE: UNINSTALL has been finished"
 }
