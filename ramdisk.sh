@@ -231,13 +231,48 @@ function _install_launch()
 #--------------------------------------------------------------------------------
 #
 
+function _uninstall_ramdisk
+{
+    _PRINT_MSG "--->: Uninstalling syscl.ramdisk..."
+    #
+    # Unload service(s).
+    #
+    tidy_execute "sudo launchctl unload /Library/LaunchDaemons/com.syscl.ramdisk.plist" "Unload com.syscl.ramdisk.plist service"
+    if [ -f /Library/LaunchDaemons/com.syscl.ramdisk.plist ];
+      then
+        tidy_execute "sudo rm /Library/LaunchDaemons/com.syscl.ramdisk.plist" "Remove service config file(s)"
+    fi
+
+    #
+    # Remove target dir(s).
+    #
+    if [ -d $gRAMDISK/Library/ ];
+      then
+        tidy_execute "sudo rm -R $gRAMDISK/Library/" "Remove target directories"
+    fi
+
+    #
+    # Remove syscl.ramdisk
+    #
+    if [ -f /etc/syscl.ramdisk ];
+      then
+        tidy_execute "sudo rm /etc/syscl.ramdisk" "Remove syscl.ramdisk"
+    fi
+
+    _PRINT_MSG "NOTE: UNINSTALL has been finished"
+}
+
+#
+#--------------------------------------------------------------------------------
+#
+
 function main()
 {
     #
     # Get argument.
     #
     gArgv=$(echo "$@" | tr '[:lower:]' '[:upper:]')
-    if [[ $# -eq 1 && "$gArgv" == "-D" || "$gArgv" == "-DEBUG" ]];
+    if [[ "$gArgv" == *"-D"* || "$gArgv" == *"-DEBUG"* ]];
       then
         #
         # Yes, we do need a debug mode.
@@ -261,10 +296,18 @@ function main()
         #
         _initCache
       else
-        #
-        # No, install syscl.ramdisk.
-        #
-        _install_launch
+        if [[ "$gArgv" == *"-U"* || "$gArgv" == *"-UNINSTALL"* ]];
+          then
+            #
+            # "-u" found, uninstall syscl.ramdisk.
+            #
+            _uninstall_ramdisk
+          else
+            #
+            # Install syscl.ramdisk.
+            #
+            _install_launch
+        fi
     fi
 }
 

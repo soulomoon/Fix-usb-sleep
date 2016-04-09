@@ -64,6 +64,7 @@ Change Log
 2016-4-9
 
 - Added RAMDISK function for users who want to boost their appliacations by fully using hardware resources (c) syscl/lighting/Yating Zhou.
+- Added UNINSTALL function for ramdisk.sh.
 
 2016-3-19
 
