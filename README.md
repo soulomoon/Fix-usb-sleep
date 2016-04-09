@@ -5,7 +5,7 @@ Hola, this is an ongoing project aims at fixing the issue of disk not ejected pr
 
 I've tested on my DELL Precision M3800. Wish you all enjoy it. Any feedback is welcomed! 
 
-How to use?
+How to use fixUSB.sh?
 ----------------
 Download the latest fixUSB.sh by entering the following command in a terminal window:
 
@@ -32,6 +32,10 @@ Once you finish the procedures, reboot your OS X and see if the issue is fixed.
 
 Change Log
 ----------------
+
+2016-4-9
+
+- Added RAMDISK function for users who want to boost their appliacations by fully using hardware resources (c) syscl/lighting/Yating Zhou.
 
 2016-3-19
 
