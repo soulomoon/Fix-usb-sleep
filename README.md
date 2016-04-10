@@ -64,6 +64,8 @@ Change Log
 2016-4-10
 
 - More general situation comes into consideration for ramdisk.
+- Added custom size function: add size of ramdisk you want!
+- Added restriction for a more comfortable addition ramdisk size.
 
 2016-4-9
 
