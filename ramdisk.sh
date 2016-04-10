@@ -51,7 +51,7 @@ gAlloc_RAM=16777216
 # Path and filename setup.
 #
 gConfig="/tmp/com.syscl.ramdisk.plist"
-gRAMScript="${REPO}/ramdisk.sh"
+gRAMScript=$(echo $0)
 
 #
 #--------------------------------------------------------------------------------
@@ -290,7 +290,7 @@ function main()
     if [[ "$gArgv" == *"-D"* || "$gArgv" == *"-DEBUG"* ]];
       then
         #
-        # Yes, we do need a debug mode.
+        # Yes, we do need debug mode.
         #
         _PRINT_MSG "NOTE: Use ${BLUE}DEBUG${OFF} mode"
         gDebug=0

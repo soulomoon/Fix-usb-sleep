@@ -61,6 +61,10 @@ or
 Change Log
 ----------------
 
+2016-4-10
+
+- More general situation comes into consideration for ramdisk.
+
 2016-4-9
 
 - Added RAMDISK function for users who want to boost their appliacations by fully using hardware resources (c) syscl/lighting/Yating Zhou.
