@@ -327,7 +327,7 @@ function _gRAM_Size()
 function _setDEFAULT_RAM()
 {
     #
-    # Default ramdisk size cannot greater than 2/3 hareware memory size.
+    # Default ramdisk size cannot greater than 2/3 hardware memory size.
     #
     echo $(($1 * 2 / 3 / 1024))
 }
@@ -356,7 +356,6 @@ function _reverse_Size()
     #
     echo $(($1 / 1024))
 }
-
 
 #
 #--------------------------------------------------------------------------------

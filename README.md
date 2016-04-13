@@ -28,7 +28,16 @@ cd ./Fix-usb-sleep
 ./fixusb.sh
 ```
 
-Once you finish the procedures, reboot your OS X and see if the issue is fixed.
+Once you finish the procedures, sleep your OS X and see if the issue is fixed.
+
+
+If you do not want to use fixusb.sh in the future, then uninstall it by entering:
+``` sh
+./fixusb.sh -u
+```
+
+
+Use "-d" argument to see the details of the whole progress.
 
 How to use ramdisk?
 ----------------
@@ -60,6 +69,12 @@ or
 
 Change Log
 ----------------
+
+2016-4-13
+
+- Fix the permission issue for sysclusbfix.sleep.
+- No more reboot required, the fix will take effect instantly after executing the fixusb.sh!
+- Added uninstall function for fixusb.sh.
 
 2016-4-10
 
