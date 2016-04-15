@@ -68,6 +68,7 @@ gRTWlan_Repo="/Library/Extensions"
 to_Plist="/Library/LaunchDaemons/com.syscl.externalfix.sleepwatcher.plist"
 to_shell_sleep="/etc/sysclusbfix.sleep"
 to_shell_wake="/etc/sysclusbfix.wake"
+gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")
 
 #
 #--------------------------------------------------------------------------------
@@ -227,7 +228,6 @@ function _RTLWlanU()
     _del ${gUSBWakeScript}
     _del "/etc/syscl.usbfix.wake"
 
-    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")
     gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl
 
     echo '#!/bin/sh'                                                                                                                                         > "$gUSBWakeScript"
