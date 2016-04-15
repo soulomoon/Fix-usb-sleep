@@ -60,10 +60,13 @@ gDebug=1
 #
 gInstall_Repo="/usr/local/sbin/"
 gFrom="${REPO}/tools"
-gConfig="/tmp/de.bernhard-baehr.sleepwatcher.plist"
+gConfig="/tmp/com.syscl.externalfix.sleepwatcher.plist"
 gUSBSleepScript="/tmp/sysclusbfix.sleep"
+gUSBWakeScript="/tmp/syscl.usbfix.wake"
+gRTWlan_kext=$(echo "RtWlanU1827")
 to_Plist="/Library/LaunchDaemons/com.syscl.externalfix.sleepwatcher.plist"
-to_shell="/etc/sysclusbfix.sleep"
+to_shell_sleep="/etc/sysclusbfix.sleep"
+to_shell_wake="/etc/sysclusbfix.wake"
 
 #
 #--------------------------------------------------------------------------------
@@ -151,12 +154,13 @@ function _printConfig()
     echo '	<key>KeepAlive</key>'                                                                                                                          >> "$gConfig"
     echo '	<true/>'                                                                                                                                       >> "$gConfig"
     echo '	<key>Label</key>'                                                                                                                              >> "$gConfig"
-    echo '	<string>com.syscl.externalfix.sleepwatcher</string>'                                                                                               >> "$gConfig"
+    echo '	<string>com.syscl.externalfix.sleepwatcher</string>'                                                                                           >> "$gConfig"
     echo '	<key>ProgramArguments</key>'                                                                                                                   >> "$gConfig"
     echo '	<array>'                                                                                                                                       >> "$gConfig"
     echo '		<string>/usr/local/sbin/sleepwatcher</string>'                                                                                             >> "$gConfig"
     echo '		<string>-V</string>'                                                                                                                       >> "$gConfig"
     echo '		<string>-s /etc/sysclusbfix.sleep</string>'                                                                                                >> "$gConfig"
+    echo '		<string>-w /etc/syscl.usbfix.wake</string>'                                                                                                >> "$gConfig"
     echo '	</array>'                                                                                                                                      >> "$gConfig"
     echo '	<key>RunAtLoad</key>'                                                                                                                          >> "$gConfig"
     echo '	<true/>'                                                                                                                                       >> "$gConfig"
@@ -190,6 +194,55 @@ function _createUSB_Sleep_Script()
     echo '#'                                                                                                                                                >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo 'diskutil list | grep -i "External" | sed -e "s| (external, physical):||" | xargs -I {} diskutil eject {}'                                         >> "$gUSBSleepScript"
+    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
+    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
+    echo '# Fix RTLWlanUSB sleep problem credit limser @PCBeta.'                                                                                            >> "$gUSBSleepScript"
+    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
+    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
+    echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBSleepScript"
+    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
+    echo 'if [[ `ioreg -rc $gRTWlan_kext | grep IOMACAddress >/dev/null 2>&1` ]];'                                                                          >> "$gUSBSleepScript"
+    echo '  then'                                                                                                                                           >> "$gUSBSleepScript"
+    echo '    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                         >> "$gUSBSleepScript"
+    echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBSleepScript"
+    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
+    echo '    if [ ! -f $gRT_Config ];'                                                                                                                     >> "$gUSBSleepScript"
+    echo '      then'                                                                                                                                       >> "$gUSBSleepScript"
+    echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'                                                                 >> "$gUSBSleepScript"
+    echo '    fi'                                                                                                                                           >> "$gUSBSleepScript"
+    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
+    echo '    osascript -e 'quit app "Wireless Network Utility"''                                                                                           >> "$gUSBSleepScript"
+    echo '    echo "1" > "$gRT_Config"'                                                                                                                     >> "$gUSBSleepScript"
+    echo '    open -a "Wireless Network Utility"'                                                                                                           >> "$gUSBSleepScript"
+    echo 'fi'                                                                                                                                               >> "$gUSBSleepScript"
+}
+
+#
+#--------------------------------------------------------------------------------
+#
+
+function _RTLWlanU()
+{
+    _del ${gUSBWakeScript}
+
+    echo '#!/bin/sh'                                                                                                                                         > "$gUSBWakeScript"
+    echo ''                                                                                                                                                 >> "$gUSBWakeScript"
+    echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBWakeScript"
+    echo ''                                                                                                                                                 >> "$gUSBWakeScript"
+    echo 'if [[ `ioreg -rc $_kext | grep IOMACAddress >/dev/null 2>&1` ]];'                                                                                 >> "$gUSBWakeScript"
+    echo '  then'                                                                                                                                           >> "$gUSBWakeScript"
+    echo '    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                         >> "$gUSBWakeScript"
+    echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBWakeScript"
+    echo ''                                                                                                                                                 >> "$gUSBWakeScript"
+    echo '    if [ ! -f $gRT_Config ];'                                                                                                                     >> "$gUSBWakeScript"
+    echo '      then'                                                                                                                                       >> "$gUSBWakeScript"
+    echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'                                                                 >> "$gUSBWakeScript"
+    echo '    fi'                                                                                                                                           >> "$gUSBWakeScript"
+    echo ''                                                                                                                                                 >> "$gUSBWakeScript"
+    echo "    kextunload /Library/Extensions/${gRTWlan_kext}.kext"                                                                                          >> "$gUSBWakeScript"
+    echo "    kextload /Library/Extensions/${gRTWlan_kext}.kext"                                                                                            >> "$gUSBWakeScript"
+    echo '    echo "0" > "$gRT_Config"'                                                                                                                     >> "$gUSBWakeScript"
+    echo 'fi'                                                                                                                                               >> "$gUSBWakeScript"
 }
 
 #
@@ -202,7 +255,8 @@ function _uinstall()
     _del /Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher.plist
     _del ${gInstall_Repo}
     _del ${to_Plist}
-    _del ${to_shell}
+    _del ${to_shell_sleep}
+    _del ${to_shell_wake}
 }
 
 #
@@ -247,14 +301,17 @@ function _install()
     #
     # Generate configuration file of sleepwatcher launch demon.
     #
-    _PRINT_MSG "--->: Generating configuration file of sleepwatcher launch daemon..."
     _tidy_exec "_printConfig" "Generate configuration file of sleepwatcher launch daemon"
 
     #
     # Generate script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou.
     #
-    _PRINT_MSG "--->: Generating script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou..."
     _tidy_exec "_createUSB_Sleep_Script" "Generating script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou"
+
+    #
+    # Generate script to load RTWlanUSB upon sleep.
+    #
+    _tidy_exec "_RTLWlanU" "Generate script to load RTWlanUSB upon sleep"
 
     #
     # Install sleepwatcher daemon.
@@ -263,8 +320,10 @@ function _install()
     _touch "${gInstall_Repo}"
     _tidy_exec "sudo cp "${gFrom}/sleepwatcher" "${gInstall_Repo}"" "Install sleepwatcher daemon"
     _tidy_exec "sudo cp "${gConfig}" "${to_Plist}"" "Install configuration of sleepwatcher daemon"
-    _tidy_exec "sudo cp "${gUSBSleepScript}" "${to_shell}"" "Install sleepwatcher script"
-    _tidy_exec "sudo chmod 744 ${to_shell}" "Fix the permissions of the file(s)"
+    _tidy_exec "sudo cp "${gUSBSleepScript}" "${to_shell_sleep}"" "Install sleep script"
+    _tidy_exec "sudo cp "${gUSBWakeScript}" "${to_shell_wake}"" "Install wake script"
+    _tidy_exec "sudo chmod 744 ${to_shell_sleep}" "Fix the permissions of ${to_shell_sleep}"
+    _tidy_exec "sudo chmod 744 ${to_shell_wake}" "Fix the permissions of ${to_shell_wake}"
     _tidy_exec "sudo launchctl load ${to_Plist}" "Trigger startup service of syscl.usb.fix"
 
     #

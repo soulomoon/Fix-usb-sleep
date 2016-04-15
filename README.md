@@ -70,6 +70,10 @@ or
 Change Log
 ----------------
 
+2016-4-15
+
+- Fixed RTWlan usb sleep issue credit limser.
+
 2016-4-13
 
 - Fix the permission issue for sysclusbfix.sleep.
