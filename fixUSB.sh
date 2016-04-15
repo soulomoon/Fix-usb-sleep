@@ -234,7 +234,7 @@ function _RTLWlanU()
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo 'if [ ! -z $gMAC_adr ];'                                                                                                                           >> "$gUSBWakeScript"
+    echo "if [ ! -f $gRT_Config ];"                                                                                                                         >> "$gUSBWakeScript"
     echo '  then'                                                                                                                                           >> "$gUSBWakeScript"
     echo "    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl"                                                                 >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
