@@ -204,7 +204,7 @@ function _createUSB_Sleep_Script()
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBSleepScript"
     echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                             >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo 'if [ ! -z "$gMAC_adr" ];'                                                                                                                         >> "$gUSBSleepScript"
+    echo 'if [[ "$gMAC_adr" -ne 0 ]];'                                                                                                                         >> "$gUSBSleepScript"
     echo '  then'                                                                                                                                           >> "$gUSBSleepScript"
     echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
