@@ -246,7 +246,7 @@ function _RTLWlanU()
     echo "    kextunload $gRTWlan_Repo/${gRTWlan_kext}.kext"                                                                                                >> "$gUSBWakeScript"
     echo "    kextload $gRTWlan_Repo/${gRTWlan_kext}.kext"                                                                                                  >> "$gUSBWakeScript"
     echo "    osascript -e 'quit app "Wireless Network Utility"'"                                                                                           >> "$gUSBWakeScript"
-    echo "    echo "0" > $gRT_Config "                                                                                                                      >> "$gUSBWakeScript"
+    echo '    echo "0" > $gRT_Config'                                                                                                                       >> "$gUSBWakeScript"
     echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBWakeScript"
     echo 'fi'                                                                                                                                               >> "$gUSBWakeScript"
 }
