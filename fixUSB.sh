@@ -227,6 +227,9 @@ function _RTLWlanU()
     _del ${gUSBWakeScript}
     _del "/etc/syscl.usbfix.wake"
 
+    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")
+    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl
+
     echo '#!/bin/sh'                                                                                                                                         > "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBWakeScript"
