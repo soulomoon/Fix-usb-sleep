@@ -62,7 +62,7 @@ gInstall_Repo="/usr/local/sbin/"
 gFrom="${REPO}/tools"
 gConfig="/tmp/com.syscl.externalfix.sleepwatcher.plist"
 gUSBSleepScript="/tmp/sysclusbfix.sleep"
-gUSBWakeScript="/tmp/syscl.usbfix.wake"
+gUSBWakeScript="/tmp/sysclusbfix.wake"
 gRTWlan_kext=$(ls /Library/Extensions | grep -i "Rtw" | sed 's/.kext//')
 gRTWlan_Repo="/Library/Extensions"
 to_Plist="/Library/LaunchDaemons/com.syscl.externalfix.sleepwatcher.plist"
@@ -225,13 +225,14 @@ function _createUSB_Sleep_Script()
 function _RTLWlanU()
 {
     _del ${gUSBWakeScript}
+    _del "/etc/syscl.usbfix.wake"
 
     echo '#!/bin/sh'                                                                                                                                         > "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBWakeScript"
     echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                             >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo 'if [ ! -z $gMAC_adr ];'                                                                                                                             >> "$gUSBWakeScript"
+    echo 'if [ ! -z $gMAC_adr ];'                                                                                                                           >> "$gUSBWakeScript"
     echo '  then'                                                                                                                                           >> "$gUSBWakeScript"
     echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
