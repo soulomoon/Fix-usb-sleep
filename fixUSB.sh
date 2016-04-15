@@ -161,7 +161,7 @@ function _printConfig()
     echo '		<string>/usr/local/sbin/sleepwatcher</string>'                                                                                             >> "$gConfig"
     echo '		<string>-V</string>'                                                                                                                       >> "$gConfig"
     echo '		<string>-s /etc/sysclusbfix.sleep</string>'                                                                                                >> "$gConfig"
-    echo '		<string>-w /etc/syscl.usbfix.wake</string>'                                                                                                >> "$gConfig"
+    echo '		<string>-w /etc/sysclusbfix.wake</string>'                                                                                                 >> "$gConfig"
     echo '	</array>'                                                                                                                                      >> "$gConfig"
     echo '	<key>RunAtLoad</key>'                                                                                                                          >> "$gConfig"
     echo '	<true/>'                                                                                                                                       >> "$gConfig"
