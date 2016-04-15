@@ -72,6 +72,8 @@ Change Log
 
 2016-4-15
 
+- Totally reconstructed the RTWlan script by syscl/ligthting/Yating Zhou, more efficient.
+- More general situation comes into consideration, support any RTL Wlan USB drivers, thanks for information provided by "BRE@TH//LESS".
 - Fixed RTWlan usb sleep issue credit limser.
 
 2016-4-13

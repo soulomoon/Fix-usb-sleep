@@ -63,7 +63,8 @@ gFrom="${REPO}/tools"
 gConfig="/tmp/com.syscl.externalfix.sleepwatcher.plist"
 gUSBSleepScript="/tmp/sysclusbfix.sleep"
 gUSBWakeScript="/tmp/syscl.usbfix.wake"
-gRTWlan_kext=$(echo "RtWlanU1827")
+gRTWlan_kext=$(ls /Library/Extensions | grep -i "Rtw" | sed 's/.kext//')
+gRTWlan_Repo="/Library/Extensions"
 to_Plist="/Library/LaunchDaemons/com.syscl.externalfix.sleepwatcher.plist"
 to_shell_sleep="/etc/sysclusbfix.sleep"
 to_shell_wake="/etc/sysclusbfix.wake"
@@ -228,10 +229,10 @@ function _RTLWlanU()
     echo '#!/bin/sh'                                                                                                                                         > "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBWakeScript"
+    echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                             >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo 'if [[ `ioreg -rc $_kext | grep IOMACAddress >/dev/null 2>&1` ]];'                                                                                 >> "$gUSBWakeScript"
+    echo 'if [ -z $gMAC_adr ];'                                                                                                                             >> "$gUSBWakeScript"
     echo '  then'                                                                                                                                           >> "$gUSBWakeScript"
-    echo '    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                         >> "$gUSBWakeScript"
     echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo '    if [ ! -f $gRT_Config ];'                                                                                                                     >> "$gUSBWakeScript"
@@ -239,10 +240,26 @@ function _RTLWlanU()
     echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'                                                                 >> "$gUSBWakeScript"
     echo '    fi'                                                                                                                                           >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo "    kextunload /Library/Extensions/${gRTWlan_kext}.kext"                                                                                          >> "$gUSBWakeScript"
-    echo "    kextload /Library/Extensions/${gRTWlan_kext}.kext"                                                                                            >> "$gUSBWakeScript"
+    echo "    kextunload $gRTWlan_Repo/${gRTWlan_kext}.kext"                                                                                                >> "$gUSBWakeScript"
+    echo "    kextload $gRTWlan_Repo/${gRTWlan_kext}.kext"                                                                                                  >> "$gUSBWakeScript"
     echo '    echo "0" > "$gRT_Config"'                                                                                                                     >> "$gUSBWakeScript"
     echo 'fi'                                                                                                                                               >> "$gUSBWakeScript"
+}
+
+#
+#--------------------------------------------------------------------------------
+#
+
+function _fnd_RTW_Repo()
+{
+    if [ -z $gRTWlan_kext ];
+      then
+        #
+        # RTWlan_kext is not in /Library/Extensions. Check /S*/L*/E*.
+        #
+        gRTWlan_kext=$(ls /System/Library/Extensions | grep -i "Rtw" | sed 's/.kext//')
+        gRTWlan_Repo="/System/Library/Extensions"
+    fi
 }
 
 #
@@ -311,6 +328,7 @@ function _install()
     #
     # Generate script to load RTWlanUSB upon sleep.
     #
+    _fnd_RTW_Repo
     _tidy_exec "_RTLWlanU" "Generate script to load RTWlanUSB upon sleep"
 
     #
