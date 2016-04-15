@@ -198,7 +198,7 @@ function _createUSB_Sleep_Script()
     echo 'diskutil list | grep -i "External" | sed -e "s| (external, physical):||" | xargs -I {} diskutil eject {}'                                         >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo '# Fix RTLWlanUSB sleep problem credit limser @PCBeta.'                                                                                            >> "$gUSBSleepScript"
+    echo '# Fix RTLWlanUSB sleep problem credit B1anker & syscl/lighting/Yating Zhou. @PCBeta.'                                                             >> "$gUSBSleepScript"
     echo '#'                                                                                                                                                >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBSleepScript"
@@ -213,7 +213,7 @@ function _createUSB_Sleep_Script()
     echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'                                                                 >> "$gUSBSleepScript"
     echo '    fi'                                                                                                                                           >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo '    osascript -e 'quit app "Wireless Network Utility"''                                                                                           >> "$gUSBSleepScript"
+    echo "    osascript -e 'quit app "Wireless Network Utility"'"                                                                                           >> "$gUSBSleepScript"
     echo '    echo "1" > "$gRT_Config"'                                                                                                                     >> "$gUSBSleepScript"
     echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBSleepScript"
     echo 'fi'                                                                                                                                               >> "$gUSBSleepScript"
@@ -245,7 +245,7 @@ function _RTLWlanU()
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "    kextunload $gRTWlan_Repo/${gRTWlan_kext}.kext"                                                                                                >> "$gUSBWakeScript"
     echo "    kextload $gRTWlan_Repo/${gRTWlan_kext}.kext"                                                                                                  >> "$gUSBWakeScript"
-    echo '    osascript -e 'quit app "Wireless Network Utility"''                                                                                           >> "$gUSBWakeScript"
+    echo "    osascript -e 'quit app "Wireless Network Utility"'"                                                                                           >> "$gUSBWakeScript"
     echo "    echo "0" > $gRT_Config "                                                                                                                      >> "$gUSBWakeScript"
     echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBWakeScript"
     echo 'fi'                                                                                                                                               >> "$gUSBWakeScript"
@@ -326,6 +326,11 @@ function _install()
     _tidy_exec "_printConfig" "Generate configuration file of sleepwatcher launch daemon"
 
     #
+    # Find RTW place.
+    #
+    _fnd_RTW_Repo
+
+    #
     # Generate script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou.
     #
     _tidy_exec "_createUSB_Sleep_Script" "Generating script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou"
@@ -333,7 +338,6 @@ function _install()
     #
     # Generate script to load RTWlanUSB upon sleep.
     #
-    _fnd_RTW_Repo
     _tidy_exec "_RTLWlanU" "Generate script to load RTWlanUSB upon sleep"
 
     #
