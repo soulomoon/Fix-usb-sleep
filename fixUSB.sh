@@ -201,10 +201,10 @@ function _createUSB_Sleep_Script()
     echo '#'                                                                                                                                                >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBSleepScript"
+    echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                             >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo 'if [[ `ioreg -rc $gRTWlan_kext | grep IOMACAddress >/dev/null 2>&1` ]];'                                                                          >> "$gUSBSleepScript"
+    echo 'if [ ! -z $gMAC_adr ];'                                                                                                                           >> "$gUSBSleepScript"
     echo '  then'                                                                                                                                           >> "$gUSBSleepScript"
-    echo '    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                         >> "$gUSBSleepScript"
     echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo '    if [ ! -f $gRT_Config ];'                                                                                                                     >> "$gUSBSleepScript"
@@ -214,7 +214,7 @@ function _createUSB_Sleep_Script()
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo '    osascript -e 'quit app "Wireless Network Utility"''                                                                                           >> "$gUSBSleepScript"
     echo '    echo "1" > "$gRT_Config"'                                                                                                                     >> "$gUSBSleepScript"
-    echo '    open -a "Wireless Network Utility"'                                                                                                           >> "$gUSBSleepScript"
+    echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBSleepScript"
     echo 'fi'                                                                                                                                               >> "$gUSBSleepScript"
 }
 
