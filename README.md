@@ -70,6 +70,10 @@ or
 Change Log
 ----------------
 
+2015-4-18
+
+- Fixed kextload/kextunload issue reported by B1anker. Removed following command lines.
+
 2016-4-15
 
 - Fixed the launch of "Wireless Network Utility" issue by B1anker & syscl/lighting/Yating Zhou.
