@@ -244,7 +244,7 @@ function _RTLWlanU()
     echo '    fi'                                                                                                                                           >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "    osascript -e 'quit app \"Wireless Network Utility\"'"                                                                                         >> "$gUSBWakeScript"
-    echo '    echo "0" > $gRT_Config'                                                                                                                       >> "$gUSBWakeScript"
+    echo '    echo "0" > "$gRT_Config"'                                                                                                                     >> "$gUSBWakeScript"
     echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBWakeScript"
     echo 'fi'                                                                                                                                               >> "$gUSBWakeScript"
 }
