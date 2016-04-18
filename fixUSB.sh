@@ -228,19 +228,21 @@ function _RTLWlanU()
     _del ${gUSBWakeScript}
     _del "/etc/syscl.usbfix.wake"
 
-    gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")
-
     echo '#!/bin/sh'                                                                                                                                         > "$gUSBWakeScript"
+    echo '#'                                                                                                                                                >> "$gUSBWakeScript"
+    echo '# Fix RTLWlanUSB sleep problem credit B1anker & syscl/lighting/Yating Zhou. @PCBeta.'                                                             >> "$gUSBWakeScript"
+    echo '#'                                                                                                                                                >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBWakeScript"
+    echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                             >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo "if [ ! -f $gRT_Config ];"                                                                                                                         >> "$gUSBWakeScript"
+    echo 'if [[ "$gMAC_adr" != 0 ]];'                                                                                                                       >> "$gUSBWakeScript"
     echo '  then'                                                                                                                                           >> "$gUSBWakeScript"
-    echo "    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl"                                                                 >> "$gUSBWakeScript"
+    echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo "    if [ ! -f $gRT_Config ];"                                                                                                                     >> "$gUSBWakeScript"
+    echo '    if [ ! -f $gRT_Config ];'                                                                                                                     >> "$gUSBWakeScript"
     echo '      then'                                                                                                                                       >> "$gUSBWakeScript"
-    echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*.rtl)'                                                                      >> "$gUSBWakeScript"
+    echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'                                                                 >> "$gUSBWakeScript"
     echo '    fi'                                                                                                                                           >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo "    osascript -e 'quit app \"Wireless Network Utility\"'"                                                                                         >> "$gUSBWakeScript"
