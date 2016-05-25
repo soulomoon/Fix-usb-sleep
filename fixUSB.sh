@@ -221,7 +221,7 @@ function _RTLWlanU()
     echo '# Added mount Disk for "OS X" (c) syscl/lighting/Yating Zhou.'                                                                                    >> "$gUSBWakeScript"
     echo '#'                                                                                                                                                >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
-    echo 'diskutil list | grep -i "External" | sed -e "s| (external, physical):||" | xargs -I {} diskutil mount {}'                                         >> "$gUSBWakeScript"
+    echo 'diskutil list | grep -i "External" | sed -e "s| (external, physical):||" | xargs -I {} diskutil mountDisk {}'                                     >> "$gUSBWakeScript"
     echo ''                                                                                                                                                 >> "$gUSBWakeScript"
     echo '#'                                                                                                                                                >> "$gUSBWakeScript"
     echo '# Fix RTLWlanUSB sleep problem credit B1anker & syscl/lighting/Yating Zhou. @PCBeta.'                                                             >> "$gUSBWakeScript"
@@ -304,7 +304,7 @@ function _touch()
 
     if [ ! -d ${target_file} ];
       then
-        _tidy_exec "sudo mkdir ${target_file}" "Create ${target_file}"
+        _tidy_exec "sudo mkdir -p ${target_file}" "Create ${target_file}"
     fi
 }
 
