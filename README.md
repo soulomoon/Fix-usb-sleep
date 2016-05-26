@@ -41,7 +41,7 @@ Use "-d" argument to see the details of the whole progress.
 
 How to use ramdisk?
 ----------------
-Download the latest fixUSB.sh by entering the following command in a terminal window:
+Download the latest ramdisk by entering the following command in a terminal window:
 
 ``` sh
 curl -o ./ramdisk https://raw.githubusercontent.com/syscl/Fix-usb-sleep/master/ramdisk.sh
@@ -69,6 +69,9 @@ or
 
 Change Log
 ----------------
+2015-5-26
+
+- Mount points at wake to fix MacBook issue #2 . 
 
 2015-4-18
 

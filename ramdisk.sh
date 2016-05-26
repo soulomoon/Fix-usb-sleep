@@ -62,35 +62,23 @@ function _PRINT_MSG()
 {
     local message=$1
 
-    if [[ $message =~ 'OK' ]];
-      then
-        local message=$(echo $message | sed -e 's/.*OK://')
-        echo "[  ${GREEN}OK${OFF}  ] ${message}."
-      else
-        if [[ $message =~ 'FAILED' ]];
-          then
-            local message=$(echo $message | sed -e 's/.*FAILED://')
-            echo "[${RED}FAILED${OFF}] ${message}."
-          else
-            if [[ $message =~ '--->' ]];
-              then
-                local message=$(echo $message | sed -e 's/.*--->://')
-                echo "[ ${GREEN}--->${OFF} ] ${message}"
-              else
-                if [[ $message =~ 'NOTE' ]];
-                  then
-                    local message=$(echo $message | sed -e 's/.*NOTE://')
-                    echo "[ ${RED}NOTE${OFF} ] ${message}."
-                  else
-                    if [[ $message =~ 'DEBUG' ]];
-                      then
-                        local message=$(echo $message | sed -e 's/.*DEBUG://')
-                        echo "[${BLUE}DEBLOG${OFF}] ${message}."
-                    fi
-                fi
-            fi
-        fi
-    fi
+    case "$message" in
+      OK*    ) local message=$(echo $message | sed -e 's/.*OK://')
+               echo "[  ${GREEN}OK${OFF}  ] ${message}."
+               ;;
+
+      FAILED*) local message=$(echo $message | sed -e 's/.*://')
+               echo "[${RED}FAILED${OFF}] ${message}."
+               ;;
+
+      ---*   ) local message=$(echo $message | sed -e 's/.*--->://')
+               echo "[ ${GREEN}--->${OFF} ] ${message}"
+               ;;
+
+      NOTE*  ) local message=$(echo $message | sed -e 's/.*NOTE://')
+               echo "[ ${RED}Note${OFF} ] ${message}."
+               ;;
+    esac
 }
 
 #
