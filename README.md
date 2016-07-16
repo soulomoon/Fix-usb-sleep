@@ -10,21 +10,20 @@ How to use fixUSB.sh?
 Download the latest fixUSB.sh by entering the following command in a terminal window:
 
 ``` sh
-git clone https://github.com/syscl/Fix-usb-sleep
+curl -o ./fixUSB.sh https://raw.githubusercontent.com/syscl/Fix-usb-sleep/master/fixUSB.sh
 ```
 
 
 This will download fixUSB.sh to your current directory (./) and the next step is to change the permissions of the file (add +x) so that it can be run.
  
 ``` sh
-chmod +x ./Fix-usb-sleep/fixUSB.sh
+chmod +x ./fixUSB.sh
 ```
 
 
 Run the script in a terminal window by:
 
 ``` sh
-cd ./Fix-usb-sleep
 ./fixusb.sh
 ```
 
@@ -69,11 +68,15 @@ or
 
 Change Log
 ----------------
-2015-5-26
+2016-7-16
+
+- Switch to curl cmd instead of git clone cmd.
+
+2016-5-26
 
 - Mount points at wake to fix MacBook issue #2 . 
 
-2015-4-18
+2016-4-18
 
 - Fixed kextload/kextunload issue reported by B1anker. Removed following command lines.
 
