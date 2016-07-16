@@ -71,6 +71,11 @@ to_shell_wake="/etc/sysclusbfix.wake"
 gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl
 
 #
+# Gain files download site
+#
+gGitHubContentURL=""
+
+#
 #--------------------------------------------------------------------------------
 #
 
