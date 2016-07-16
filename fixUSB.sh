@@ -69,6 +69,7 @@ to_Plist="/Library/LaunchDaemons/com.syscl.externalfix.sleepwatcher.plist"
 to_shell_sleep="/etc/sysclusbfix.sleep"
 to_shell_wake="/etc/sysclusbfix.wake"
 gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl
+gGitHubContentURL="https://raw.githubusercontent.com/syscl/Fix-usb-sleep/master"
 
 #
 #--------------------------------------------------------------------------------
@@ -125,6 +126,19 @@ function _tidy_exec()
         fi
 
         rm /tmp/report &> /dev/null
+    fi
+}
+
+#
+#--------------------------------------------------------------------------------
+#
+
+function _checkForExecutableFile()
+{
+    if [ ! -f ${gFrom}/tools/sleepwatcher ];
+      then
+        _touch "${gFrom}/tools"
+        _tidy_exec "sudo curl -o ${gFrom}/tools/sleepwatcher --silent "${gGitHubContentURL}/tools/sleepwatcher"" "Download sleepwatcher"
     fi
 }
 
@@ -283,15 +297,7 @@ function _del()
 {
     local target_file=$1
 
-    if [ -d ${target_file} ];
-      then
-        _tidy_exec "sudo rm -R ${target_file}" "Remove ${target_file}"
-      else
-        if [ -f ${target_file} ];
-          then
-            _tidy_exec "sudo rm ${target_file}" "Remove ${target_file}"
-        fi
-    fi
+    _tidy_exec "sudo rm -r ${target_file}" "Remove ${target_file}"
 }
 
 #
@@ -314,6 +320,10 @@ function _touch()
 
 function _install()
 {
+    #
+    # Check if sleepwatcher has been downloaded
+    #
+    _checkForExecutableFile
     #
     # Generate configuration file of sleepwatcher launch demon.
     #
