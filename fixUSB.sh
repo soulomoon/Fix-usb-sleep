@@ -138,7 +138,7 @@ function _checkForExecutableFile()
     if [ ! -f ${gFrom}/tools/sleepwatcher ];
       then
         _touch "${gFrom}/tools"
-        _tidy_exec "sudo curl -o ${gFrom}/tools/sleepwatcher --silent "${gGitHubContentURL}/tools/sleepwatcher"" "Download sleepwatcher"
+        _tidy_exec "sudo curl -o ${gFrom}/sleepwatcher --silent "${gGitHubContentURL}/tools/sleepwatcher"" "Download sleepwatcher"
     fi
 }
 
@@ -297,7 +297,15 @@ function _del()
 {
     local target_file=$1
 
-    _tidy_exec "sudo rm -r ${target_file}" "Remove ${target_file}"
+    if [ -d ${target_file} ];
+      then
+        _tidy_exec "sudo rm -R ${target_file}" "Remove ${target_file}"
+      else
+        if [ -f ${target_file} ];
+          then
+            _tidy_exec "sudo rm ${target_file}" "Remove ${target_file}"
+        fi
+    fi
 }
 
 #
