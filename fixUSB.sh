@@ -135,7 +135,7 @@ function _tidy_exec()
 
 function _checkForExecutableFile()
 {
-    if [ ! -f ${gFrom}/tools/sleepwatcher ];
+    if [ ! -f ${gFrom}/sleepwatcher ];
       then
         _touch "${gFrom}/tools"
         _tidy_exec "sudo curl -o ${gFrom}/sleepwatcher --silent "${gGitHubContentURL}/tools/sleepwatcher"" "Download sleepwatcher"
