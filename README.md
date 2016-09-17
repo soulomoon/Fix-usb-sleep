@@ -68,6 +68,12 @@ or
 
 Change Log
 ----------------
+2016-9-16
+
+- Fixed an issue that will potentially mount external EFI partitions
+see issue #5  by @brousseau6933
+- Fixed typo: "${gFrom}/tools" --> "${gFrom}"
+
 2016-7-16
 
 - Switch to curl cmd instead of git clone cmd.
