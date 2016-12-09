@@ -68,6 +68,10 @@ or
 
 Change Log
 ----------------
+2016-12-8
+
+- Patches for PCIe USB card to behave normal after sleep see issue #7 by @ralexx
+
 2016-9-16
 
 - Fixed an issue that will potentially mount external EFI partitions
