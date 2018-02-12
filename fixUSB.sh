@@ -19,7 +19,7 @@
 
 #
 # The script expects '0.5' but non-US localizations use '0,5' so we export
-# LC_NUMERIC here (for the duration of the deploy.sh) to prevent errors.
+# LC_NUMERIC here (for the duration of the fixUSB.sh) to prevent errors.
 #
 export LC_NUMERIC="en_US.UTF-8"
 
