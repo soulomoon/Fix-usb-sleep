@@ -239,7 +239,19 @@ function _createUSB_Sleep_Script()
     echo "    osascript -e 'quit app \"Wireless Network Utility\"'"                                                                                         >> "$gUSBSleepScript"
     echo '    echo "1" > "$gRT_Config"'                                                                                                                     >> "$gUSBSleepScript"
     echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBSleepScript"
-    echo 'fi'                                                                                                                                               >> "$gUSBSleepScript"
+    echo 'fi'>> "$gUSBSleepScript"
+    echo '#'>> "$gUSBSleepScript"
+    echo '# Fix sleep with type-c'>> "$gUSBSleepScript"
+    echo '#'>> "$gUSBSleepScript"
+    echo 'osascript <<EOD'>> "$gUSBSleepScript"
+    echo '    tell application "System Events" to tell process "SystemUIServer"'>> "$gUSBSleepScript"
+    echo '        set PCCardMenuBarItem to (menu bar item 1 of menu bar 1 whose description contains "PC Card")'>> "$gUSBSleepScript"
+    echo '        tell PCCardMenuBarItem'>> "$gUSBSleepScript"
+    echo '            click'>> "$gUSBSleepScript"
+    echo '            click menu item "Power off Card" of menu 1'>> "$gUSBSleepScript"
+    echo '        end tell'>> "$gUSBSleepScript"
+    echo '    end tell'>> "$gUSBSleepScript"
+    echo 'EOD'>> "$gUSBSleepScript"                                                                                                                                               >> "$gUSBSleepScript"
 }
 
 #
@@ -282,12 +294,26 @@ function _RTLWlanU()
     echo '    echo "0" > "$gRT_Config"'                                                                                                                     >> "$gUSBWakeScript"
     echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBWakeScript"
     echo 'fi'                                                                                                                                               >> "$gUSBWakeScript"
+    echo '#'>> "$gUSBWakeScript"
+    echo '# Fix sleep with type-c'>> "$gUSBWakeScript"
+    echo '#'>> "$gUSBWakeScript"
+    echo 'osascript <<EOD'>> "$gUSBWakeScript"
+    echo '    tell application "System Events" to tell process "SystemUIServer"'>> "$gUSBWakeScript"
+    echo '        set PCCardMenuBarItem to (menu bar item 1 of menu bar 1 whose description contains "PC Card")'>> "$gUSBWakeScript"
+    echo '        tell PCCardMenuBarItem'>> "$gUSBWakeScript"
+    echo '            click'>> "$gUSBWakeScript"
+    echo '            click menu item "Power off Card" of menu 1'>> "$gUSBWakeScript"
+    echo '        end tell'>> "$gUSBWakeScript"
+    echo '    end tell'>> "$gUSBWakeScript"
+    echo 'EOD'>> "$gUSBWakeScript"
+
 }
 
 #
 #--------------------------------------------------------------------------------
 #
 
+    #
 function _fnd_RTW_Repo()
 {
     if [ -z $gRTWlan_kext ];
@@ -392,7 +418,6 @@ function _install()
 
     #
     # Clean up.
-    #
     _tidy_exec "rm $gConfig $gUSBSleepScript" "Clean up"
 
     #
