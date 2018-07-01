@@ -10,7 +10,7 @@ How to use fixUSB.sh?
 Download the latest `fixUSB.sh` by entering the following command in a terminal window:
 
 ``` sh
-curl -o ./fixUSB.sh https://raw.githubusercontent.com/syscl/Fix-usb-sleep/master/fixUSB.sh
+curl -o ./fixUSB.sh https://raw.githubusercontent.com/soulomoon/Fix-usb-sleep/master/fixUSB.sh
 ```
 
 
