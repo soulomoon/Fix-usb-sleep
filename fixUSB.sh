@@ -372,7 +372,7 @@ function _install()
     #
     # Generate script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou.
     #
-    _tidy_exec "_createUSB_Sleep_Script >$gUSBSleepScript" "Generating script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou"
+    _createUSB_Sleep_Script >${gUSBSleepScript}
 
     #
     # Generate script to load RTWlanUSB after wake from sleep.
