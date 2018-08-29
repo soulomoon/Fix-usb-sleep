@@ -219,6 +219,10 @@ function _createUSB_Sleep_Script()
     echo 'done'                                                                                                                                             >> "$gUSBSleepScript"
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
 #echo 'diskutil list | grep -i "External" | sed -e "s| (external, physical):||" | xargs -I {} diskutil eject {}'                                         >> "$gUSBSleepScript"
+    # no wlan kext found
+    if [ -z $gRTWlan_kext ]; then
+        return
+    fi
     echo ''                                                                                                                                                 >> "$gUSBSleepScript"
     echo '#'                                                                                                                                                >> "$gUSBSleepScript"
     echo '# Fix RTLWlanUSB sleep problem credit B1anker & syscl/lighting/Yating Zhou. @PCBeta.'                                                             >> "$gUSBSleepScript"
