@@ -178,8 +178,6 @@ function _printConfig()
 
 function _createUSB_Sleep_Script()
 {
-
-
     echo '#!/bin/sh'
     echo '#'
     echo '# This script aims to unmount all external devices automatically before sleep.'
@@ -211,9 +209,9 @@ function _createUSB_Sleep_Script()
     echo '            echo ${gCurrent_Partitions[k]} >> ${gMountPartition}'
     echo '        fi'
     echo '      done'
-    echo '      if [ -z ${is_SDCard} ]; then '
+    echo '      if [ -z ${is_SDCard} ]; then'
     echo '          diskutil eject ${gDisk[i]}'
-    echo '      else
+    echo '      else'
     echo '          diskutil unmountDisk ${gDisk[i]}'
     echo '      fi'
     echo '  fi'
@@ -243,7 +241,7 @@ function _createUSB_Sleep_Script()
     echo "    osascript -e 'quit app \"Wireless Network Utility\"'"
     echo '    echo "1" > "$gRT_Config"'
     echo '    open "/Applications/Wireless Network Utility.app"'
-    echo 'fi'                                                                                                                                               
+    echo 'fi'
 }
 
 #
