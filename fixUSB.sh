@@ -178,20 +178,16 @@ function _printConfig()
 
 function _createUSB_Sleep_Script()
 {
-    #
-    # Remove previous script.
-    #
-    _del ${gUSBSleepScript}
-
-    echo '#!/bin/sh'                                                                                                                                         > "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo '# This script aims to unmount all external devices automatically before sleep.'                                                                   >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo '# Without this procedure, various computers with OS X/Mac OS X(even on a real Mac) suffer from "Disk not ejected properly"'                       >> "$gUSBSleepScript"
-    echo '# issue when there're external devices plugged-in. That's the reason why I created this script to fix this issue. (syscl/lighting/Yating Zhou)'   >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo '# All credit to Bernhard Baehr (bernhard.baehr@gmx.de), without his great sleepwatcher dameon, this fix will not be created.'                     >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
+    echo '#!/bin/sh'
+    echo '#'
+    echo '# This script aims to unmount all external devices automatically before sleep.'
+    echo '#'
+    echo '# Without this procedure, various computers with OS X/Mac OS X(even on a real Mac) suffer from "Disk not ejected properly"'
+    echo '# issue when there're external devices plugged-in. That's the reason why I created this script to fix this issue. (syscl/lighting/Yating Zhou)'
+    echo '#'
+    echo '# All credit to Bernhard Baehr (bernhard.baehr@gmx.de), without his great sleepwatcher dameon, this fix will not be created.'
+    echo '#'
+    echo ''
     echo '#'>> "$gUSBSleepScript"
     echo '# Fix sleep with type-c'>> "$gUSBSleepScript"
     echo '#'>> "$gUSBSleepScript"
@@ -204,55 +200,61 @@ function _createUSB_Sleep_Script()
     echo '        end tell'>> "$gUSBSleepScript"
     echo '    end tell'>> "$gUSBSleepScript"
     echo 'EOD'>> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo '# Added unmount Disk for "OS X" (c) syscl/lighting/Yating Zhou.'                                                                                  >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo 'gMountPartition="/tmp/com.syscl.externalfix"'                                                                                                     >> "$gUSBSleepScript"
-#    echo 'gDisk=($(diskutil list | grep -i "External" | sed -e "s| (external, physical):||" -e "s|\/dev\/||"))'                                             >> "$gUSBSleepScript"
-    echo 'gDisk=($(diskutil list |grep -i -i "dev" |grep -i -o "disk[0-9]"))'                                                                               >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo 'for ((i=0; i<${#gDisk[@]}; ++i))'                                                                                                                 >> "$gUSBSleepScript"
-    echo 'do'                                                                                                                                               >> "$gUSBSleepScript"
-    echo '  gProtocol=$(diskutil info ${gDisk[i]} |grep -i "Protocol" |sed -e "s|Protocol:||" -e "s| ||g")'                                                 >> "$gUSBSleepScript"
-    echo '  if [[ ${gProtocol} == *"USB"* ]];'                                                                                                              >> "$gUSBSleepScript"
-    echo '    then'                                                                                                                                         >> "$gUSBSleepScript"
-    echo '      gCurrent_Partitions=($(diskutil list ${gDisk[i]} |grep -o "disk[0-9]s[0-9]"))'                                                              >> "$gUSBSleepScript"
-    echo '      for ((k=0; k<${#gCurrent_Partitions[@]}; ++k))'                                                                                             >> "$gUSBSleepScript"
-    echo '      do'                                                                                                                                         >> "$gUSBSleepScript"
-    echo '        gConfirm_Mounted=$(diskutil info ${gCurrent_Partitions[k]} |grep -i 'Mounted' |sed -e "s| Mounted:||" -e "s| ||g")'                       >> "$gUSBSleepScript"
-    echo '        if [[ ${gConfirm_Mounted} == *"Yes"* ]];'                                                                                                 >> "$gUSBSleepScript"
-    echo '          then'                                                                                                                                   >> "$gUSBSleepScript"
-    echo '            echo ${gCurrent_Partitions[k]} >> ${gMountPartition}'                                                                                 >> "$gUSBSleepScript"
-    echo '        fi'                                                                                                                                       >> "$gUSBSleepScript"
-    echo '      done'                                                                                                                                       >> "$gUSBSleepScript"
-    echo '      diskutil eject ${gDisk[i]}'                                                                                                                 >> "$gUSBSleepScript"
-    echo '  fi'                                                                                                                                             >> "$gUSBSleepScript"
-    echo 'done'                                                                                                                                             >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-#echo 'diskutil list | grep -i "External" | sed -e "s| (external, physical):||" | xargs -I {} diskutil eject {}'                                         >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo '# Fix RTLWlanUSB sleep problem credit B1anker & syscl/lighting/Yating Zhou. @PCBeta.'                                                             >> "$gUSBSleepScript"
-    echo '#'                                                                                                                                                >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo "gRTWlan_kext=$(echo $gRTWlan_kext)"                                                                                                               >> "$gUSBSleepScript"
-    echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'                                                             >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo 'if [[ "$gMAC_adr" != 0 ]];'                                                                                                                       >> "$gUSBSleepScript"
-    echo '  then'                                                                                                                                           >> "$gUSBSleepScript"
-    echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'                                                                 >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo '    if [ ! -f $gRT_Config ];'                                                                                                                     >> "$gUSBSleepScript"
-    echo '      then'                                                                                                                                       >> "$gUSBSleepScript"
-    echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'                                                                 >> "$gUSBSleepScript"
-    echo '    fi'                                                                                                                                           >> "$gUSBSleepScript"
-    echo ''                                                                                                                                                 >> "$gUSBSleepScript"
-    echo "    osascript -e 'quit app \"Wireless Network Utility\"'"                                                                                         >> "$gUSBSleepScript"
-    echo '    echo "1" > "$gRT_Config"'                                                                                                                     >> "$gUSBSleepScript"
-    echo '    open "/Applications/Wireless Network Utility.app"'                                                                                            >> "$gUSBSleepScript"
-    echo 'fi'>> "$gUSBSleepScript"
-
+    echo ''
+    echo '#'
+    echo '# Added unmount Disk for "OS X" (c) syscl/lighting/Yating Zhou.'
+    echo '#'
+    echo 'gMountPartition="/tmp/com.syscl.externalfix"'
+    echo 'gDisk=($(diskutil list |grep -i -i "dev" |grep -i -o "disk[0-9]"))'
+    echo ''
+    echo 'for ((i=0; i<${#gDisk[@]}; ++i))'
+    echo 'do'
+    echo '  gProtocol=$(diskutil info ${gDisk[i]} |grep -i "Protocol" |sed -e "s|Protocol:||" -e "s| ||g")'
+    echo '  is_SDCard=$(diskutil info ${gDisk[i]} |grep -i "Device / Media Name" |grep -i "SD Card")'
+    echo '  if [[ ${gProtocol} == *"USB"* ]];'
+    echo '    then'
+    echo '      gCurrent_Partitions=($(diskutil list ${gDisk[i]} |grep -o "disk[0-9]s[0-9]"))'
+    echo '      for ((k=0; k<${#gCurrent_Partitions[@]}; ++k))'
+    echo '      do'
+    echo '        gConfirm_Mounted=$(diskutil info ${gCurrent_Partitions[k]} |grep -i 'Mounted' |sed -e "s| Mounted:||" -e "s| ||g")'
+    echo '        if [[ ${gConfirm_Mounted} == *"Yes"* ]];'
+    echo '          then'
+    echo '            echo ${gCurrent_Partitions[k]} >> ${gMountPartition}'
+    echo '        fi'
+    echo '      done'
+    echo '      if [ -z ${is_SDCard} ]; then'
+    echo '          diskutil eject ${gDisk[i]}'
+    echo '      else'
+    echo '          diskutil unmountDisk ${gDisk[i]}'
+    echo '      fi'
+    echo '  fi'
+    echo 'done'
+    echo ''
+    # no wlan kext found
+    if [ -z $gRTWlan_kext ]; then
+        return
+    fi
+    echo ''
+    echo '#'
+    echo '# Fix RTLWlanUSB sleep problem credit B1anker & syscl/lighting/Yating Zhou. @PCBeta.'
+    echo '#'
+    echo ''
+    echo "gRTWlan_kext=$(echo $gRTWlan_kext)"
+    echo 'gMAC_adr=$(ioreg -rc $gRTWlan_kext | sed -n "/IOMACAddress/ s/.*= <\(.*\)>.*/\1/ p")'
+    echo ''
+    echo 'if [[ "$gMAC_adr" != 0 ]];'
+    echo '  then'
+    echo '    gRT_Config="/Applications/Wireless Network Utility.app"/${gMAC_adr}rfoff.rtl'
+    echo ''
+    echo '    if [ ! -f $gRT_Config ];'
+    echo '      then'
+    echo '        gRT_Config=$(ls "/Applications/Wireless Network Utility.app"/*rfoff.rtl)'
+    echo '    fi'
+    echo ''
+    echo "    osascript -e 'quit app \"Wireless Network Utility\"'"
+    echo '    echo "1" > "$gRT_Config"'
+    echo '    open "/Applications/Wireless Network Utility.app"'
+    echo 'fi'
 }
 
 #
@@ -397,12 +399,14 @@ function _install()
     #
     # Generate script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou.
     #
-    _tidy_exec "_createUSB_Sleep_Script" "Generating script to unmount external devices before sleep (c) syscl/lighting/Yating Zhou"
+    _createUSB_Sleep_Script >${gUSBSleepScript}
 
     #
-    # Generate script to load RTWlanUSB upon sleep.
+    # Generate script to load RTWlanUSB after wake from sleep.
     #
-    _tidy_exec "_RTLWlanU" "Generate script to load RTWlanUSB upon sleep"
+    if [ -z $gRTWlan_kext ]; then
+        _tidy_exec "_RTLWlanU" "Generate script to load RTWlanUSB upon sleep"
+    fi
 
     #
     # Install sleepwatcher daemon.
